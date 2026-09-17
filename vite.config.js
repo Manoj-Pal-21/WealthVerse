@@ -1,19 +1,31 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import path from "path";
+import { fileURLToPath } from "url";
 
-// https://vite.dev/config/
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   server: {
-    port: 5173,
-    host: true,
+    watch: {
+      ignored: ["**/*.mp4"],
+    },
     proxy: {
-      '/api/sharekhan': {
-        target: 'https://mcpuat.sharekhan.com',
+      // Proxy /api/sharekhan → Sharekhan LLM endpoint (avoids browser CORS)
+      "/api/sharekhan": {
+        target: "https://mcpuat.sharekhan.com",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/sharekhan/, '/api/v1/chat/completions'),
-        secure: false
-      }
-    }
-  }
-})
+        secure: true,
+        rewrite: () => "/api/v1/chat/completions",
+      },
+    },
+  },
+});

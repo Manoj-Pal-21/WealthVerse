@@ -16,8 +16,9 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { DEEP_WEALTH_DATA } from '../../data/wealthDeepData';
+import { addAppointment } from '../../services/rmDataService';
 
-export default function RMConnectModal({ isOpen, onClose, clientNetWorth = "₹27.74 Lakh" }) {
+export default function RMConnectModal({ isOpen, onClose, clientNetWorth = "₹27.74 Lakh", onNavigateToRM }) {
   const [selectedSlot, setSelectedSlot] = useState("Today, 4:30 PM (IST)");
   const [consultationType, setConsultationType] = useState("video");
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
@@ -35,11 +36,17 @@ export default function RMConnectModal({ isOpen, onClose, clientNetWorth = "₹2
   ];
 
   const handleConfirmBooking = () => {
+    addAppointment({
+      clientId: 'client-manoj-pal',
+      clientName: 'Manoj Pal',
+      clientNetWorth: clientNetWorth,
+      date: selectedSlot,
+      type: consultationType,
+      topic: topic,
+      isLiveBooking: true,
+      notes: `Direct client booking via 360° Portal. Topic: ${topic}`
+    });
     setBookingConfirmed(true);
-    setTimeout(() => {
-      // Auto reset after 3.5 seconds
-      // setBookingConfirmed(false);
-    }, 4000);
   };
 
   return (
@@ -126,13 +133,25 @@ export default function RMConnectModal({ isOpen, onClose, clientNetWorth = "₹2
                 Scheduled for <strong>{selectedSlot}</strong> via <strong>{consultationType.toUpperCase()}</strong>.
                 Calendar invite & meeting link have been dispatched to Manoj Pal's registered email.
               </p>
-              <div className="pt-3">
+              <div className="pt-3 flex items-center justify-center gap-2.5 flex-wrap">
                 <button
                   onClick={onClose}
-                  className="px-6 py-2 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow hover:bg-emerald-700 transition-colors"
+                  className="px-5 py-2 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow hover:bg-emerald-700 transition-colors"
                 >
                   Return to Dashboard
                 </button>
+                {onNavigateToRM && (
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onNavigateToRM();
+                    }}
+                    className="px-5 py-2 bg-slate-900 text-amber-300 font-bold text-xs rounded-xl shadow hover:bg-slate-800 transition-colors flex items-center gap-1.5"
+                  >
+                    <span>View in RM Desk Schedule</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
             </div>
           ) : (

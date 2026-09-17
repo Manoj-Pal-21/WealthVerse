@@ -1,4 +1,4 @@
-import { HeartPulse, ShieldCheck } from 'lucide-react';
+import { Sparkles, ShieldCheck } from 'lucide-react';
 
 export default function PlannerFooter({ onNavigate }) {
   return (
@@ -6,15 +6,20 @@ export default function PlannerFooter({ onNavigate }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
-              <HeartPulse className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-slate-950 via-indigo-950 to-blue-900 flex items-center justify-center text-amber-400 border border-amber-400/30">
+              <Sparkles className="w-4 h-4 text-amber-300" />
             </div>
             <div>
-              <span className="font-extrabold text-slate-900 text-sm">
-                Financial Health Planner
-              </span>
+              <div className="flex items-center gap-1">
+                <span className="font-extrabold text-slate-950 text-sm">
+                  m.Stock
+                </span>
+                <span className="text-slate-500 font-normal text-sm">
+                  Wealth360
+                </span>
+              </div>
               <p className="text-[11px] text-slate-400">
-                A 360° Financial Wellness & Health Diagnostics Prototype
+                Understand what you own, what you owe, what you're building & what you're leaving behind.
               </p>
             </div>
           </div>

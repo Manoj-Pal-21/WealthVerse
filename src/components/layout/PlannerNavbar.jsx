@@ -16,7 +16,9 @@ import {
   ArrowRight,
   Wallet,
   PieChart,
-  CreditCard
+  CreditCard,
+  Headset,
+  Briefcase
 } from 'lucide-react';
 
 export default function PlannerNavbar({
@@ -28,7 +30,9 @@ export default function PlannerNavbar({
   onResetDemo,
   journeyStep = 1,
   onSetJourneyStep,
-  hasCompletedJourney = false
+  hasCompletedJourney = false,
+  onOpenRM,
+  onOpenAiSuggestions
 }) {
   const isJourneyPhase = activeScreen === 'journey' || activeScreen === 'profile' || activeScreen === 'welcome';
   const isLoadingPhase = activeScreen === 'loading';
@@ -45,6 +49,7 @@ export default function PlannerNavbar({
     { id: 'plan', label: 'Personalized Plan', icon: ShieldCheck },
     { id: 'advisor', label: 'AI Advisor (New Page)', icon: MessageSquareText, hasAi: true },
     { id: 'progress', label: 'Goal Milestones', icon: Target },
+    { id: 'rm', label: 'RM Desk (Vikram)', icon: Briefcase, isRM: true, badge: 'SEBI' },
   ];
 
   return (
@@ -52,35 +57,29 @@ export default function PlannerNavbar({
       {/* Top Banner Row */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
-          {/* Brand Logo */}
+          {/* Brand Logo matching m.Stock Wealth360 */}
           <div 
-            onClick={() => {
-              if (hasCompletedJourney) {
-                onNavigate('dashboard');
-              } else {
-                onNavigate('journey');
-              }
-            }}
-            className="flex items-center gap-3 cursor-pointer group shrink-0"
+            onClick={() => onNavigate('welcome')}
+            className="flex items-center gap-2.5 cursor-pointer group shrink-0"
+            title="Go to Wealth360 Home"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-              <HeartPulse className="w-6 h-6" />
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-slate-950 via-indigo-950 to-blue-900 flex items-center justify-center text-amber-400 shadow-md border border-amber-400/30 group-hover:scale-105 transition-transform">
+              <Sparkles className="w-5 h-5 text-amber-300" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-slate-900 tracking-tight text-lg">
-                  Financial Health Planner
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold text-slate-950 tracking-tight text-base font-display">
+                  m.Stock
                 </span>
-                <span className={`text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full border ${
-                  isJourneyPhase 
-                    ? "bg-amber-50 text-amber-800 border-amber-200"
-                    : "bg-blue-50 text-blue-700 border-blue-200"
-                }`}>
-                  {isJourneyPhase ? "Guided Journey" : "Verified Diagnostics"}
+                <span className="text-slate-500 font-normal text-base">
+                  Wealth360
+                </span>
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 ml-1">
+                  4 Pillars
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 font-medium hidden sm:block">
-                {isJourneyPhase ? "Step-by-step diagnostic intake" : "Diagnose • Prioritize • Act"}
+              <p className="text-[10px] text-slate-400 font-medium hidden sm:block">
+                Grow • Protect • Transfer
               </p>
             </div>
           </div>
@@ -142,6 +141,44 @@ export default function PlannerNavbar({
 
           {/* Right Action Buttons */}
           <div className="flex items-center gap-2">
+            {/* AI Portfolio Suggestions Trigger */}
+            <button
+              onClick={onOpenAiSuggestions}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/20 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              title="Automated AI Portfolio Suggestions & Overlap Analysis"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+              <span className="hidden sm:inline">AI Suggestions</span>
+              <span className="w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-black text-[9px] flex items-center justify-center">
+                5
+              </span>
+            </button>
+
+            {/* RM Portal Switcher Button */}
+            <button
+              onClick={() => onNavigate('rm')}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer ${
+                activeScreen === 'rm'
+                  ? 'bg-amber-400 text-slate-950 ring-2 ring-amber-300'
+                  : 'bg-indigo-950 hover:bg-indigo-900 text-amber-300 border border-indigo-700/60 hover:scale-105 active:scale-95'
+              }`}
+              title="Access SEBI Relationship Manager Portal (Vikram Malhotra)"
+            >
+              <Briefcase className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">RM Portal</span>
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse hidden md:inline" />
+            </button>
+
+            {/* Talk to RM Button */}
+            <button
+              onClick={onOpenRM}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              title="Talk to Dedicated Relationship Manager"
+            >
+              <Headset className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Talk to RM</span>
+            </button>
+
             {isJourneyPhase ? (
               <button
                 onClick={onResetDemo}
